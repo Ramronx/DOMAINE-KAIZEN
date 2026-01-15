@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¤ DOMAINE KAIZEN ¤ | Ramron</title>
+
+<style>
+/* Base */
+body {
+  margin:0;
+  min-height:100vh;
+  font-family:'Montserrat', Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#000;
+  color:#f5f5f5;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* Fond animé doré (vent) */
+body::before {
+  content:"";
+  position:fixed;
+  top:0; left:0; width:100%; height:100%;
+  background:linear-gradient(45deg, rgba(212,175,55,0.1), rgba(0,0,0,0.2));
+  z-index:-2;
+  animation:moveBG 12s linear infinite;
+}
+@keyframes moveBG{
+  0%{background-position:0 0;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0 0;}
+}
+
+/* Particules dorées flottantes */
+.goldParticle {
+  position:absolute;
+  border-radius:50%;
+  opacity:0.7;
+  animation:float 5s linear infinite;
+  background:radial-gradient(circle, #d4af37, transparent);
+}
+@keyframes float{
+  0%{transform:translateY(0) translateX(0) rotate(0deg);}
+  50%{transform:translateY(-80px) translateX(50px) rotate(180deg);}
+  100%{transform:translateY(0) translateX(0) rotate(360deg);}
+}
+
+.container{
+  width:100%;
+  max-width:460px;
+  padding:20px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+}
+
+/* Titres */
+h1{ 
+  font-size:32px; 
+  color:#d4af37; 
+  margin-bottom:5px; 
+  margin-top:-40px; 
+}
+
+/* Citation */
+#quote{
+  font-size:18px; 
+  color:#fff1a8; 
+  font-style:italic; 
+  margin:25px 0;
+  letter-spacing:1px;
+}
+
+/* Boutons */
+button{
+  width:100%;
+  padding:15px;
+  margin-top:15px;
+  font-size:18px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#d4af37,#8b6b1f);
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+}
+button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 15px #d4af37;
+}
+
+/* Liens */
+#links{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+}
+#links a{
+  color:#d4af37;
+  text-decoration:none;
+  font-size:16px;
+}
+#links a:hover{
+  text-decoration:underline;
+}
+
+/* Quiz */
+.question{ font-size:22px; margin:20px 0; }
+.options button{
+  background:linear-gradient(135deg,#111,#333);
+  color:#d4af37;
+  border:1px solid #d4af37;
+  margin:5px 0;
+}
+.progress-bar{
+  width:100%;
+  height:10px;
+  background:#222;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:15px;
+}
+.progress{
+  height:100%;
+  width:0%;
+  background:linear-gradient(135deg,#d4af37,#fff1a8);
+  transition:width .3s;
+}
+
+/* Résultat */
+#result img{
+  width:210px;
+  margin:20px auto;
+  border-radius:16px;
+  box-shadow:0 0 20px #000;
+  display:block;
+}
+.title{ font-size:20px; color:#d4af37; margin-top:10px; }
+.share{
+  display:inline-block;
+  margin-top:20px;
+  padding:12px 20px;
+  background:#25D366;
+  color:white;
+  border-radius:12px;
+  font-size:18px;
+  text-decoration:none;
+  transition:transform .2s;
+}
+.share:hover{ transform:scale(1.05); }
+</style>
+</head>
+
+<body>
+
+<!-- Particules dorées -->
+<script>
+for(let j=0;j<25;j++){
+  let p=document.createElement("div");
+  p.className="goldParticle";
+  p.style.left=Math.random()*100+"%";
+  p.style.top=Math.random()*100+"%";
+  p.style.animationDuration=(3+Math.random()*5)+"s";
+  p.style.width=(3+Math.random()*5)+"px";
+  p.style.height=(3+Math.random()*5)+"px";
+  document.body.appendChild(p);
+}
+</script>
+
+<div class="container">
+
+  <!-- ACCUEIL -->
+  <div id="start">
+    <h1>¤ DOMAINE KAIZEN ¤</h1>
+    <div id="quote">"Transforme chaque obstacle en puissance dorée"</div>
+    <button onclick="startQuiz()">COMMENCER</button>
+    <div id="links">
+      <a href="#" onclick="showAbout()">À propos</a>
+      <a href="#" onclick="showHelp()">Aide</a>
+    </div>
+  </div>
+
+  <!-- À PROPOS -->
+  <div id="about" style="display:none;">
+    <h1>¤ À propos ¤</h1>
+    <p>Créé par Ramron. Explore tes héros d’anime favoris !</p>
+    <button onclick="returnHome()">Retour</button>
+  </div>
+
+  <!-- AIDE -->
+  <div id="help" style="display:none;">
+    <h1>¤ Aide ¤</h1>
+    <p>Réponds aux questions selon ta personnalité. Partage ton résultat sur WhatsApp !</p>
+    <button onclick="returnHome()">Retour</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" style="display:none;">
+    <div class="progress-bar"><div class="progress" id="progress"></div></div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <!-- RESULTAT -->
+  <div id="result" style="display:none;">
+    <h2 id="resultName"></h2>
+    <div class="title" id="resultTitle"></div>
+    <img id="resultImage">
+    <a id="shareBtn" class="share" target="_blank">Partager sur WhatsApp</a>
+    <button onclick="returnHome()">Retour à l’accueil</button>
+  </div>
+
+</div>
+
+<script>
+// Personnages
+const personnages=[
+ {name:"Goku",title:"L’esprit pur de la puissance infinie",type:"force",img:"images/goku.png"},
+ {name:"Vegeta",title:"La fierté de la puissance absolue",type:"force",img:"images/vegeta.png"},
+ {name:"Naruto",title:"Le cœur indomptable du courage",type:"impulsif",img:"images/naruto.png"},
+ {name:"Sasuke",title:"L’âme froide de la vengeance",type:"froid",img:"images/sasuke.png"},
+ {name:"Tanjiro",title:"Le cœur compatissant et courageux",type:"protecteur",img:"images/tanjiro.png"},
+ {name:"Nezuko",title:"La force silencieuse et protectrice",type:"protecteur",img:"images/nezuko.png"},
+ {name:"Yuji",title:"Le cœur pur de la force",type:"force",img:"images/yuji.png"},
+ {name:"Nobara",title:"La détermination explosive",type:"impulsif",img:"images/nobara.png"},
+ {name:"Itachi",title:"Le génie du sacrifice silencieux",type:"stratège",img:"images/itachi.png"},
+ {name:"Mikasa",title:"La protectrice au cœur d’acier",type:"protecteur",img:"images/mikasa.png"},
+ {name:"Loid",title:"L’espion stratège parfait",type:"stratège",img:"images/loid.png"},
+ {name:"Sung Jin-Woo",title:"Le chasseur ultime",type:"stratège",img:"images/jinwoo.png"}
+];
+
+// Questions
+const questions=[
+ {q:"Face à un ennemi puissant tu…",o:[["L’affrontes de front","force"],["Prépares une stratégie","stratège"],["Reste prudent","froid"]]},
+ {q:"Si tes amis sont en danger…",o:[["Tu fonces les protéger","protecteur"],["Tu réfléchis à un plan","stratège"],["Tu hésites mais agis","impulsif"]]},
+ {q:"Ton rêve ultime ?",o:[["Devenir le plus fort","force"],["Aider le monde","protecteur"],["Maîtriser la technique parfaite","stratège"]]},
+ {q:"Comment réagis-tu à l’injustice ?",o:[["Tu te bats immédiatement","impulsif"],["Tu l’analyses","stratège"],["Tu ignores mais planifies","froid"]]},
+ {q:"Ton style de combat ?",o:[["Explosif et puissant","force"],["Rapide et précis","froid"],["Tactique et varié","stratège"]]},
+ {q:"Ce que tu valorises le plus ?",o:[["Force et courage","force"],["Amitié et protection","protecteur"],["Intelligence et stratégie","stratège"]]},
+ {q:"Ton défaut principal ?",o:[["Impulsif","impulsif"],["Trop distant","froid"],["Trop réfléchi","stratège"]]},
+ {q:"Si tu gagnes un pouvoir ultime…",o:[["Je l’utilise pour protéger","protecteur"],["Je l’utilise pour dominer","force"],["Je l’utilise intelligemment","stratège"]]},
+ {q:"Tes amis te décrivent comme…",o:[["Leader courageux","impulsif"],["Calme et efficace","froid"],["Planificateur et stratège","stratège"]]},
+ {q:"Ta devise ?",o:[["Ne jamais abandonner","impulsif"],["Protéger les autres","protecteur"],["Réfléchir avant d’agir","stratège"]]},
+ {q:"Comment réagis-tu face à la peur ?",o:[["Tu fonces malgré tout","impulsif"],["Tu restes froid et calculateur","froid"],["Tu utilises la peur pour réfléchir","stratège"]]},
+ {q:"Ton type d’allié préféré ?",o:[["Puissant et loyal","force"],["Sage et protecteur","protecteur"],["Intelligent et tacticien","stratège"]]},
+ {q:"Si tu devais choisir une arme…",o:[["Épée ou poings","force"],["Technique mentale","stratège"],["Bouclier ou défense","protecteur"]]},
+ {q:"Comment affrontes-tu un défi impossible ?",o:[["Avec audace","impulsif"],["Avec patience et plan","stratège"],["Avec calme et observation","froid"]]},
+ {q:"Ton plus grand moteur ?",o:[["La passion","impulsif"],["La justice","protecteur"],["La logique","stratège"]]}
+];
+
+let i=0,s={};
+
+// Fonctions quiz
+function startQuiz(){
+  hideAll();
+  document.getElementById("quiz").style.display="block";
+  showQ();
+}
+function showQ(){
+ const q=questions[i];
+ document.getElementById("question").innerText=q.q;
+ const opt=document.getElementById("options");
+ opt.innerHTML="";
+ q.o.forEach(a=>{ const b=document.createElement("button"); b.innerText=a[0]; b.onclick=()=>pick(a[1]); opt.appendChild(b); });
+ document.getElementById("progress").style.width=(i/questions.length*100)+"%";
+}
+function pick(t){ s[t]=(s[t]||0)+1; i++; i<questions.length?showQ():result();}
+function result(){
+ hideAll();
+ document.getElementById("result").style.display="block";
+ let best=null,max=0;
+ for(let k in s){if(s[k]>max){max=s[k];best=k;}}
+ const list=personnages.filter(p=>p.type===best);
+ const p=list[Math.floor(Math.random()*list.length)];
+ document.getElementById("resultName").innerText=p.name;
+ document.getElementById("resultTitle").innerText=p.title;
+ document.getElementById("resultImage").src=p.img;
+ const msg=`🔥 Mon âme d’anime est ${p.name} ⚔️\n${p.title}\nDécouvre la tienne ici 👑👇\n${location.href}`;
+ document.getElementById("shareBtn").href="https://wa.me/?text="+encodeURIComponent(msg);
+}
+
+// Affichage Aide / À propos
+function showAbout(){ hideAll(); document.getElementById("about").style.display="block"; }
+function showHelp(){ hideAll(); document.getElementById("help").style.display="block"; }
+
+// Retour accueil
+function returnHome(){ hideAll(); document.getElementById("start").style.display="block"; i=0; s={}; }
+
+// Masquer tout
+function hideAll(){
+  document.getElementById("start").style.display="none";
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="none";
+  document.getElementById("about").style.display="none";
+  document.getElementById("help").style.display="none";
+}
+</script>
+</body>
+</html>
